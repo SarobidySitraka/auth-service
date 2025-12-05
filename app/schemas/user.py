@@ -28,6 +28,19 @@ class UserResponse(UserBase):
     created_at: datetime
     updated_at: datetime
 
+class AdminUserCreate(UserBase):
+    password: str = Field(min_length=8, max_length=100)
+    is_active: bool = True
+    is_superuser: bool = False
+
+
+class AdminUserUpdate(BaseModel):
+    email: EmailStr | None = None
+    username: str | None = Field(None, min_length=3, max_length=50)
+    full_name: str | None = Field(None, max_length=100)
+    password: str | None = Field(None, min_length=8, max_length=100)
+    is_active: bool | None = None
+    is_superuser: bool | None = None
 
 class Token(BaseModel):
     access_token: str

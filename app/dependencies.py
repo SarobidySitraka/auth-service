@@ -35,7 +35,6 @@ async def get_current_user(
 
     user = await UserService.get_by_id(db, user_id)
     if user is None:
-        print(f"DEBUG: Utilisateur non trouvé en DB pour l'ID: {user_id}")
         raise credentials_exception
 
     return user
@@ -46,4 +45,14 @@ async def get_current_active_user(
 ) -> User:
     if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Utilisateur inactif")
+    return current_user
+
+async def get_current_superuser(
+    current_user: Annotated[User, Depends(get_current_active_user)]
+) -> User:
+    if not current_user.is_superuser:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Privilèges insuffisants. Accès administrateur requis"
+        )
     return current_user
