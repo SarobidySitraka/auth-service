@@ -8,12 +8,12 @@ services:
     environment:
       MYSQL_DATABASE: auth_db
       MYSQL_USER: cedia
-      MYSQL_PASSWORD: auth-cedia
-      MYSQL_ROOT_PASSWORD: root_auth-cedia
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
-      - "3307:3306"
+      - "3306:3306"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "db"]
       interval: 20s
@@ -25,7 +25,7 @@ services:
     container_name: auth_service
     restart: unless-stopped
     ports:
-      - "8003:8000"
+      - "8000:8000"
     env_file:
       - .env
     depends_on:
